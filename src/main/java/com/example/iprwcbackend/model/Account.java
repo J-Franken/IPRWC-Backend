@@ -20,3 +20,4 @@ public class Account {
         private String password;
         private boolean admin;
 }
+
