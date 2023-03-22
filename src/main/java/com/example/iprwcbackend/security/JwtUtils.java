@@ -10,7 +10,7 @@ public class JwtUtils {
     private static final Key secretKey = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256);
 
     public static String generateToken(Account account) {
-        Claims claims = Jwts.claims().setSubject(account.getFull_name());
+        Claims claims = Jwts.claims().setSubject(account.getEmail());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -18,7 +18,7 @@ public class JwtUtils {
                 .compact();
     }
 
-    public static String getUsernameFromToken(String token) {
+    public static String getEmailFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
