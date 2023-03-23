@@ -2,6 +2,8 @@ package com.example.iprwcbackend.controller;
 
 import com.example.iprwcbackend.dao.AccountDao;
 import com.example.iprwcbackend.model.Account;
+import com.example.iprwcbackend.model.ApiResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +34,9 @@ public class AccountController {
 
     @PostMapping
     @ResponseBody
-    public Account addAccount(@RequestBody Account account) {
-        return accountDao.addAccount(account);
+    public ApiResponse addAccount(@RequestBody Account account) {
+        accountDao.addAccount(account);
+        return new ApiResponse(HttpStatus.ACCEPTED, "Account added successfully");
     }
 
     @PutMapping("/{id}")

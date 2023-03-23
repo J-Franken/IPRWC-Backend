@@ -27,8 +27,8 @@ public class AccountDao {
         return accountRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Account not found with email " + email));
     }
 
-    public Account addAccount(Account account) {
-        return accountRepository.save(account);
+    public void addAccount(Account account) {
+        accountRepository.save(account);
     }
 
     public Account updateAccount(Integer id, Account updatedAccount) {

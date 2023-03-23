@@ -1,3 +1,13 @@
+import com.example.iprwcbackend.dao.AccountDao;
+import com.example.iprwcbackend.model.Account;
+import com.example.iprwcbackend.model.ApiResponse;
+import com.example.iprwcbackend.services.InvalidMailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
 //package com.example.iprwcbackend.controller;
 //
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -11,30 +21,63 @@
 //import org.springframework.web.bind.annotation.RequestBody;
 //import org.springframework.web.bind.annotation.RestController;
 //
-//@RestController
-//@CrossOrigin("*")
-//public class AuthController {
+@RestController
+@RequestMapping("/api/v1/auth")
+@CrossOrigin("*")
+public class AuthController {
+
+    @Autowired
+    private AccountDao accountDao;
+//    @Autowired
+//    private JWTUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authManager;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private final InvalidMailService invalidMailService;
+
+
+    public AuthController(InvalidMailService invalidMailService) {
+        this.invalidMailService = invalidMailService;
+    }
+
+    @PostMapping("/register")
+    public Object registerHandler(@RequestBody Account account) {
+        try {
+            if (invalidMailService.patternMatches(account.getEmail())) {
+                String encodedPass = passwordEncoder.encode(account.getPassword());
+                account.setPassword(encodedPass);
+                accountDao.addAccount(account);
+//                return new ApiResponse(HttpStatus.ACCEPTED, jwtUtil.generateToken(account.getEmail()));
+            } else {
+                return new ApiResponse(HttpStatus.BAD_REQUEST, "Invalid email");
+            }
+        } catch (Exception e) {
+            return new ApiResponse(HttpStatus.BAD_REQUEST, "Email already in use");
+        }
+    }
+
+//    @PostMapping("/login")
+//    public Object loginHandler(@RequestBody LoginCredentials body) {
+//        try {
+//            if (invalidMailService.patternMatches(body.getEmail())) {
+//                UsernamePasswordAuthenticationToken authInputToken =
+//                        new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword());
+//                authManager.authenticate(authInputToken);
+//                return new ApiResponse(HttpStatus.ACCEPTED, jwtUtil.generateToken(body.getEmail()));
+//            } else {
+//                return new ApiResponse(HttpStatus.BAD_REQUEST, "Invalid email");
+//            }
+//        } catch (AuthenticationException authExc) {
+//            return new ApiResponse(HttpStatus.UNAUTHORIZED, "Invalid email/password");
+//        }
+//    }
 //
-////    @Autowired
-////    private AuthenticationManager authenticationManager;
-////
-////    @Autowired
-////    private JwtTokenGenerator jwtTokenGenerator;
-////
-////    @PostMapping("/login")
-////    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-////
-////        Authentication authentication = authenticationManager.authenticate(
-////                new UsernamePasswordAuthenticationToken(
-////                        loginRequest.getUsername(),
-////                        loginRequest.getPassword()
-////                )
-////        );
-////
-////        SecurityContextHolder.getContext().setAuthentication(authentication);
-////
-////        String jwtToken = jwtTokenGenerator.generateToken(authentication.getName());
-////
-////        return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
-////    }
-//}
+//
+//    @GetMapping("/info")
+//    public ApiResponse getUserDetails() {
+//        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        return new ApiResponse(HttpStatus.ACCEPTED, employeeDao.findByEmail(email).get());
+//    }
+}
