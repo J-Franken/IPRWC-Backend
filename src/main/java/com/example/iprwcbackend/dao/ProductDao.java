@@ -1,9 +1,8 @@
 package com.example.iprwcbackend.dao;
 
 import com.example.iprwcbackend.model.Product;
-import jakarta.persistence.EntityNotFoundException;
+import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component

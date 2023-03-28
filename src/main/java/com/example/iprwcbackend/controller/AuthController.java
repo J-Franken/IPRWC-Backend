@@ -1,35 +1,33 @@
+package com.example.iprwcbackend.controller;
+
 import com.example.iprwcbackend.dao.AccountDao;
 import com.example.iprwcbackend.model.Account;
 import com.example.iprwcbackend.model.ApiResponse;
+import com.example.iprwcbackend.model.LoginCredentials;
+import com.example.iprwcbackend.security.JWTUtil;
 import com.example.iprwcbackend.services.InvalidMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-//package com.example.iprwcbackend.controller;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.web.bind.annotation.CrossOrigin;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RestController;
-//
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 @CrossOrigin("*")
 public class AuthController {
 
     @Autowired
     private AccountDao accountDao;
-//    @Autowired
-//    private JWTUtil jwtUtil;
+    @Autowired
+    private JWTUtil jwtUtil;
     @Autowired
     private AuthenticationManager authManager;
     @Autowired
@@ -49,7 +47,7 @@ public class AuthController {
                 String encodedPass = passwordEncoder.encode(account.getPassword());
                 account.setPassword(encodedPass);
                 accountDao.addAccount(account);
-//                return new ApiResponse(HttpStatus.ACCEPTED, jwtUtil.generateToken(account.getEmail()));
+                return new ApiResponse(HttpStatus.ACCEPTED, jwtUtil.generateToken(account.getEmail()));
             } else {
                 return new ApiResponse(HttpStatus.BAD_REQUEST, "Invalid email");
             }
@@ -58,26 +56,26 @@ public class AuthController {
         }
     }
 
-//    @PostMapping("/login")
-//    public Object loginHandler(@RequestBody LoginCredentials body) {
-//        try {
-//            if (invalidMailService.patternMatches(body.getEmail())) {
-//                UsernamePasswordAuthenticationToken authInputToken =
-//                        new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword());
-//                authManager.authenticate(authInputToken);
-//                return new ApiResponse(HttpStatus.ACCEPTED, jwtUtil.generateToken(body.getEmail()));
-//            } else {
-//                return new ApiResponse(HttpStatus.BAD_REQUEST, "Invalid email");
-//            }
-//        } catch (AuthenticationException authExc) {
-//            return new ApiResponse(HttpStatus.UNAUTHORIZED, "Invalid email/password");
-//        }
-//    }
-//
-//
-//    @GetMapping("/info")
-//    public ApiResponse getUserDetails() {
-//        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        return new ApiResponse(HttpStatus.ACCEPTED, employeeDao.findByEmail(email).get());
-//    }
+    @PostMapping("/login")
+    public Object loginHandler(@RequestBody LoginCredentials body) {
+        try {
+            if (invalidMailService.patternMatches(body.getEmail())) {
+                UsernamePasswordAuthenticationToken authInputToken =
+                        new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword());
+                authManager.authenticate(authInputToken);
+                return new ApiResponse(HttpStatus.ACCEPTED, jwtUtil.generateToken(body.getEmail()));
+            } else {
+                return new ApiResponse(HttpStatus.BAD_REQUEST, "Invalid email");
+            }
+        } catch (AuthenticationException authExc) {
+            return new ApiResponse(HttpStatus.UNAUTHORIZED, "Invalid email/password");
+        }
+    }
+
+
+    @GetMapping("/info")
+    public ApiResponse getUserDetails() {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return new ApiResponse(HttpStatus.ACCEPTED, accountDao.findByEmail(email));
+    }
 }

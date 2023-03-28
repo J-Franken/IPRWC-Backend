@@ -1,7 +1,8 @@
 package com.example.iprwcbackend.model;
 
-import jakarta.persistence.*;
 import lombok.*;
+
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -9,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "Order")
+@Table(name = "booking")
 
 public class Order {
     @Id

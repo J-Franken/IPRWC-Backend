@@ -1,11 +1,12 @@
 package com.example.iprwcbackend.dao;
 
 import com.example.iprwcbackend.model.Account;
-import com.example.iprwcbackend.model.Product;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AccountDao {
@@ -25,6 +26,18 @@ public class AccountDao {
 
     public Account getAccountByEmail(String email) {
         return accountRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Account not found with email " + email));
+    }
+
+    public Optional<Account> findByEmail(String email) {
+        ArrayList<Account> accounts = (ArrayList<Account>) accountRepository.findAll();
+
+        for (Account account : accounts) {
+            if (account.getEmail().contains(email)) {
+
+                return Optional.ofNullable(account);
+            }
+        }
+        return Optional.empty();
     }
 
     public void addAccount(Account account) {

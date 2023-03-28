@@ -39,6 +39,7 @@ public class AccountController {
         return new ApiResponse(HttpStatus.ACCEPTED, "Account added successfully");
     }
 
+
     @PutMapping("/{id}")
     @ResponseBody
     public Account updateAccount(@PathVariable Integer id, @RequestBody Account account) {
