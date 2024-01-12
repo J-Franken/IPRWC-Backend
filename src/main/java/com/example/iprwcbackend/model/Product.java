@@ -1,6 +1,9 @@
 package com.example.iprwcbackend.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import lombok.*;
 
 @Getter
@@ -17,5 +20,6 @@ public class Product {
     private Integer id;
     private String name;
     private String description;
+    @Min(value = 0, message = "Value must be non-negative")
     private Double price;
 }
