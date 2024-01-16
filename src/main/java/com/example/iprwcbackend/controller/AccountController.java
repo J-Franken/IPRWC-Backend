@@ -11,7 +11,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/accounts")
-@CrossOrigin("*")
+@CrossOrigin(origins = "${frontend_url}")
 public class AccountController {
 
     private final AccountDao accountDao;

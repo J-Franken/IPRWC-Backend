@@ -9,7 +9,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/products")
-@CrossOrigin("*")
+@CrossOrigin(origins = "${frontend_url}")
 public class ProductController {
 
     private final ProductDao productDao;
