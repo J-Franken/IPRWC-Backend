@@ -14,7 +14,7 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://iprwc-frontend-app.s3-website.eu-north-1.amazonaws.com/#/");
+        config.addAllowedOrigin("http://iprwc-frontend-app.s3-website.eu-north-1.amazonaws.com");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
