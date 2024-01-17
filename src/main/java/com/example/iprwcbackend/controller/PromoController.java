@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/coupons")
-@CrossOrigin("*")
+@CrossOrigin(origins = "${frontend_url}")
 public class PromoController {
     @Autowired
     private PromoDao promoDao;
