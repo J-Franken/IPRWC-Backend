@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,6 +37,13 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/products").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/products/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/api/products").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/api/products/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, "/api/products/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/api/products/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/api/admin/**").hasRole("USER")
                 .and()
                 .userDetailsService(uds)
                 .exceptionHandling()

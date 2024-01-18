@@ -44,6 +44,7 @@ public class AuthController {
     public Object registerHandler(@RequestBody Account account) {
         try {
             if (invalidMailService.patternMatches(account.getEmail())) {
+                account.setAdmin(false);
                 String encodedPass = passwordEncoder.encode(account.getPassword());
                 account.setPassword(encodedPass);
                 accountDao.addAccount(account);
