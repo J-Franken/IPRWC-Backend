@@ -13,8 +13,6 @@ import java.util.Optional;
 
 @Component
 public class MyUserDetailsService implements UserDetailsService {
-
-
     private final AccountDao accountDao;
 
     public MyUserDetailsService(AccountDao accountDao) {

@@ -17,14 +17,4 @@ import java.util.Optional;
 @RequestMapping("/api/coupons")
 @CrossOrigin(origins = "${frontend_url}")
 public class PromoController {
-    @Autowired
-    private PromoDao promoDao;
-
-    @GetMapping("/{code}")
-    public ResponseEntity<String> getCouponByCode(@PathVariable String code) {
-        Optional<Promo> couponOptional = promoDao.getCouponByCode(code);
-
-        return couponOptional.map(coupon -> new ResponseEntity<>(coupon.getCode(), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
 }
