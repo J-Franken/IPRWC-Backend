@@ -9,5 +9,4 @@ class IprwcBackendApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

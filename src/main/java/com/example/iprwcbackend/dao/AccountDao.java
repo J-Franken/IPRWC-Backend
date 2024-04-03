@@ -1,7 +1,7 @@
 package com.example.iprwcbackend.dao;
 
 import com.example.iprwcbackend.model.Account;
-import com.example.iprwcbackend.services.AdminCheckService;
+import com.example.iprwcbackend.services.CheckIfUserIsAdminService;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
@@ -12,11 +12,11 @@ import java.util.Optional;
 @Component
 public class AccountDao {
     private final AccountRepository accountRepository;
-    private final AdminCheckService adminCheckService;
+    private final CheckIfUserIsAdminService checkIfUserIsAdminService;
 
-    public AccountDao(AccountRepository accountRepository, AdminCheckService adminCheckService) {
+    public AccountDao(AccountRepository accountRepository, CheckIfUserIsAdminService checkIfUserIsAdminService) {
         this.accountRepository = accountRepository;
-        this.adminCheckService = adminCheckService;
+        this.checkIfUserIsAdminService = checkIfUserIsAdminService;
     }
 
     public List<Account> getAllAccounts() {
@@ -60,7 +60,7 @@ public class AccountDao {
     }
 
     public boolean isAccountAdmin(Account account){
-        return adminCheckService.adminCheck(accountRepository.findById(account.getId()));
+        return checkIfUserIsAdminService.adminCheck(accountRepository.findById(account.getId()));
     }
 }
 

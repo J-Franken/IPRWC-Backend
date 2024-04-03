@@ -12,10 +12,10 @@ import java.util.Collections;
 import java.util.Optional;
 
 @Component
-public class MyUserDetailsService implements UserDetailsService {
+public class GetMyUserDetailsService implements UserDetailsService {
     private final AccountDao accountDao;
 
-    public MyUserDetailsService(AccountDao accountDao) {
+    public GetMyUserDetailsService(AccountDao accountDao) {
         this.accountDao = accountDao;
     }
 

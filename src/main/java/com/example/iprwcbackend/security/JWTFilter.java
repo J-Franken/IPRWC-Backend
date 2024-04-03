@@ -1,7 +1,7 @@
 package com.example.iprwcbackend.security;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.example.iprwcbackend.services.MyUserDetailsService;
+import com.example.iprwcbackend.services.GetMyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +19,7 @@ import java.io.IOException;
 @Component
 public class JWTFilter extends OncePerRequestFilter {
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private GetMyUserDetailsService userDetailsService;
     @Autowired
     private JWTUtil jwtUtil;
 

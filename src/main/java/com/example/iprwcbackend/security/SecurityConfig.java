@@ -1,7 +1,7 @@
 package com.example.iprwcbackend.security;
 
 import com.example.iprwcbackend.dao.AccountRepository;
-import com.example.iprwcbackend.services.MyUserDetailsService;
+import com.example.iprwcbackend.services.GetMyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,7 @@ public class SecurityConfig {
     @Autowired
     private JWTFilter filter;
     @Autowired
-    private MyUserDetailsService uds;
+    private GetMyUserDetailsService uds;
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,18 +39,23 @@ public class SecurityConfig {
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/accounts").hasRole("USER")
                 .antMatchers(HttpMethod.GET, "/api/accounts/{id}").hasRole("USER")
-                .antMatchers(HttpMethod.POST, "api/accounts/{id}").permitAll()
+                .antMatchers(HttpMethod.POST, "api/accounts/{id}").hasRole("USER")
                 .antMatchers(HttpMethod.PUT, "/api/accounts/{id}").hasRole("USER")
                 .antMatchers(HttpMethod.DELETE, "/api/accounts/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "api/promocode/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, "/api/promocode/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/api/promocode/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/api/promocode").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/promocode/{id}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/products").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/products/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/api/products/{id}").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/orders").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/products").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/api/products/{id}").hasRole("USER")
                 .antMatchers(HttpMethod.PUT, "/api/products/{id}").hasRole("USER")
                 .antMatchers(HttpMethod.DELETE, "/api/products/{id}").hasRole("USER")
                 .antMatchers(HttpMethod.GET, "/api/orders").hasRole("USER")
                 .antMatchers(HttpMethod.GET, "/api/orders/{id}").hasRole("USER")
-                .antMatchers(HttpMethod.POST, "/api/orders").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/orders/{id}").hasRole("USER")
                 .antMatchers(HttpMethod.DELETE, "/api/orders/{id}").hasRole("USER")
                 .antMatchers(HttpMethod.DELETE, "/api/admin/**").hasRole("USER")

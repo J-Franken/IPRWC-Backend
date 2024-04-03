@@ -39,29 +39,31 @@ public class ProductController {
 
     @PostMapping
     @ResponseBody
-    public Object addProduct(@RequestBody Product product) {
+    public ApiResponse<Product> addProduct(@RequestBody Product product) {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = accountDao.findByEmail(email).get();
         if(!this.accountDao.isAccountAdmin(account)){
             return new ApiResponse<>(HttpStatus.UNAUTHORIZED, "You are not authorized to use this.");
         }
-        return productDao.addProduct(product);
+        productDao.addProduct(product);
+        return new ApiResponse<>(HttpStatus.ACCEPTED, "Succesfully added the product");
     }
 
     @PutMapping("/{id}")
     @ResponseBody
-    public Object updateProduct(@PathVariable Integer id, @RequestBody Product product) {
+    public ApiResponse<Product> updateProduct(@PathVariable Integer id, @RequestBody Product product) {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = accountDao.findByEmail(email).get();
-        if(!this.accountDao.isAccountAdmin(account)){
+        if (!this.accountDao.isAccountAdmin(account)) {
             return new ApiResponse<>(HttpStatus.UNAUTHORIZED, "You are not authorized to use this.");
         }
-        return productDao.updateProduct(id, product);
+        productDao.updateProduct(id, product);
+        return new ApiResponse<>(HttpStatus.ACCEPTED, "Succesfully updated the product");
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
-    public Object deleteProduct(@PathVariable Integer id) {
+    public ApiResponse<Product> deleteProduct(@PathVariable Integer id) {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = accountDao.findByEmail(email).get();
         if(!this.accountDao.isAccountAdmin(account)){
